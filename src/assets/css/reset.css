@@ -1,0 +1,39 @@
+@charset "utf-8";
+html body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+body { font-size: 14px; font-family: "microsoft yahei";  color: #000000; }
+* { margin: 0; padding: 0; }
+img { border: 0 }
+a { text-decoration: none; color: #ffffff; outline: none; }
+select, input { font-size: 12px; font-family: "microsoft yahei"; padding: 0; margin: 0; }
+input:focus { outline: none }
+input, button, select, textarea, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, p, form, em, span { margin: 0; padding: 0; list-style: none }
+table { border: 0; padding: 0; margin: 0; }
+em, i { font-style: normal }
+table { border-collapse: collapse; border-spacing: 0; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+ul, ol, li { list-style: none; }
+img { border: none; }
+.l { float: left }
+.r { float: right }
+.clearfix:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+input, textarea:focus { outline: none; }
+
+/*隐藏 input  number 输入框多余的小箭头*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0; 
+}
+.el-scrollbar{
+    height: 100%;
+}
+.el-scrollbar__wrap{
+    overflow-x: hidden;
+}
+.el-select-dropdown__wrap.el-scrollbar__wrap{
+    overflow-x:scroll
+}
