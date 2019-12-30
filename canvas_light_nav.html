@@ -132,7 +132,7 @@
 
 
         var _calCurve = function (a, b, c, d, e, f) {
-            //console.log(a + f,b,c-f,d,c,d);
+            console.log(a + f,b,c-f,d,c,d);
             e.bezierCurveTo(a + f, b, c - f, d, c, d)
         }
 
@@ -210,6 +210,7 @@
             e.addColorStop(c(1, 0 + f + d), "#8ED6FF");
             e.addColorStop(c(1, 0 + f + d + .1), "rgba(0,0,0,0)");
             e.addColorStop(1, "rgba(0,0,0,0)");
+            console.log(c(1, m(0, 0 + f)))
             b.lineWidth = 1.5;
             b.strokeStyle = e;
             b.fillStyle = opt.pattern;
@@ -232,6 +233,7 @@
         }
 
         var _draw = function (canvasObj, trueorfalse) {
+            /* console.log(canvasObj) */
             var navindex = opt.currentIndex, tableHeight = opt.tabHeight, f = 0, g = 40, i = 20, j = .5, k = 2.5, l = 0;
             if (canvasObj.beginPath(), canvasObj.moveTo(-50, opt.height + 10), canvasObj.lineTo(-50, tableHeight + j), opt.animating) {
                 var m = getCurSpeed(opt.curDisX, opt.distance);
