@@ -4,7 +4,7 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 const cn = {
     layout:{
         'formName': '车联网云平台',
-        menus:[
+        'menus':[
             {
                 name:'监控中心',
                 path:'/mointor',

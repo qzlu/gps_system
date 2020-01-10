@@ -12,23 +12,28 @@
                     <ul class="menu-children" v-if="item.chirdren">
                         <li class="menu-children-item" v-for="(obj,j) in item.chirdren" :key="j">
                             <router-link :to="obj.path">{{item.name}}</router-link>
+                            
                         </li>
                     </ul>
                 </li>
             </ul>
         </header>
         <div class="layout-main">
-
+            <my-map></my-map>
         </div>  
     </div>
 </template>
 <script>
+import {MyMap} from '@/components/index.js'
 export default {
     data(){
         return{
             menus:[],
             canvas:null
         }
+    },
+    components:{
+        MyMap
     },
     created(){
         this.menus = this.$t('layout.menus')
@@ -205,7 +210,7 @@ export default {
         width:100%;
         height:58px;
         background:linear-gradient(0deg,rgba(42,79,145,1) 0%,rgba(9,29,63,1) 100%);
-        position: fixed;
+        position: relative;
         ul{
             display: flex;
             li.menu-item{
