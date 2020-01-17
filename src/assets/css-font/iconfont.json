@@ -1,0 +1,373 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12809574",
+      "name": "Battery",
+      "font_class": "Battery",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "12809575",
+      "name": "Airport",
+      "font_class": "Airport",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "12809576",
+      "name": "Alert",
+      "font_class": "Alert",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "12809577",
+      "name": "Camera",
+      "font_class": "Camera",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "12809579",
+      "name": "Add fleet",
+      "font_class": "Addfleet",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "12809580",
+      "name": "Customer service",
+      "font_class": "Customerservice",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "12809581",
+      "name": "Company",
+      "font_class": "Company",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "12809582",
+      "name": "Eturn",
+      "font_class": "Eturn",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "12809583",
+      "name": "Click",
+      "font_class": "Click",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "12809584",
+      "name": "Fence",
+      "font_class": "Fence",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "12809585",
+      "name": "Export",
+      "font_class": "Export",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "12809586",
+      "name": "Download",
+      "font_class": "Download",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "12809587",
+      "name": "Find by box",
+      "font_class": "Findbybox",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "12809588",
+      "name": "Gas",
+      "font_class": "Gas",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "12809589",
+      "name": "Hospital",
+      "font_class": "Hospital",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "12809590",
+      "name": "Keys",
+      "font_class": "Keys",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "12809591",
+      "name": "Industrial area",
+      "font_class": "Industrialarea",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "12809592",
+      "name": "Import",
+      "font_class": "Import",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "12809593",
+      "name": "Locked",
+      "font_class": "Locked",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "12809594",
+      "name": "mine1",
+      "font_class": "mine",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "12809595",
+      "name": "News",
+      "font_class": "News",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "12809596",
+      "name": "Group",
+      "font_class": "Group",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "12809597",
+      "name": "Maximize",
+      "font_class": "Maximize",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "12809598",
+      "name": "Park",
+      "font_class": "Park",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "12809599",
+      "name": "Reduction",
+      "font_class": "Reduction",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "12809600",
+      "name": "It's mine",
+      "font_class": "Itsmine",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "12809601",
+      "name": "Ranging",
+      "font_class": "Ranging",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "12809602",
+      "name": "Oil drum",
+      "font_class": "Oildrum",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "12809603",
+      "name": "Notice",
+      "font_class": "Notice",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "12809604",
+      "name": "Unlock",
+      "font_class": "Unlock",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "12809605",
+      "name": "Road conditions",
+      "font_class": "Roadconditions",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "12809606",
+      "name": "Show fence",
+      "font_class": "Showfence",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "12809608",
+      "name": "Start a company",
+      "font_class": "Startacompany",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "12809609",
+      "name": "Update calendar",
+      "font_class": "Updatecalendar",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "12809627",
+      "name": "Delete number",
+      "font_class": "Deletenumber",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "12809639",
+      "name": "video",
+      "font_class": "video",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "12809651",
+      "name": "Address",
+      "font_class": "Address",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "12809652",
+      "name": "Calendar",
+      "font_class": "Calendar",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "12809653",
+      "name": "Cold chain",
+      "font_class": "Coldchain",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "12809654",
+      "name": "Edit",
+      "font_class": "Edit",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "12809655",
+      "name": "Car",
+      "font_class": "Car",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "12809656",
+      "name": "Device",
+      "font_class": "Device",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "12809657",
+      "name": "New",
+      "font_class": "New",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "12809658",
+      "name": "ID card",
+      "font_class": "IDcard",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "12809659",
+      "name": "Lock",
+      "font_class": "Lock",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "12809660",
+      "name": "Parking",
+      "font_class": "Parking",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "12809661",
+      "name": "Return",
+      "font_class": "Return",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "12809662",
+      "name": "Rubbish",
+      "font_class": "Rubbish",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "12809663",
+      "name": "Time",
+      "font_class": "Time",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "12809664",
+      "name": "Positioning",
+      "font_class": "Positioning",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "12809665",
+      "name": "Set up",
+      "font_class": "Setup",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "12809666",
+      "name": "Transfer",
+      "font_class": "Transfer",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    }
+  ]
+}
