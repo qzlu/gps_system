@@ -1,11 +1,12 @@
 <template>
   <div id="app" :style="style">
     <transition name="fade" mode="out-in" appear>
-      <router-view/>
+      <login></login>
     </transition>
   </div>
 </template>
 <script>
+import Login from '@/views/Login/'
 export default {
   name: 'App',
   data(){
@@ -13,6 +14,9 @@ export default {
       ratioHeigt:null,
       ratioWidth:null
     }
+  },
+  components:{
+    Login
   },
   computed:{
     style(){

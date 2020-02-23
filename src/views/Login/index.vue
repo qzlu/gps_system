@@ -117,10 +117,9 @@ export default {
             }
             Login({
                 FUserName:this.userName,
-                FPassword:this.password
+                FPassword:Md5(this.password)
             })
             .then((result) => {
-                console.log(result)
                 this.saveUserInfo()
                 let data = result.FObject[0]
                 localStorage.setItem('FToken',data.FTokenID)
