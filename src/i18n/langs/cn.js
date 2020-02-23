@@ -65,6 +65,7 @@ const cn = {
     vehicleType: '车辆类型',
     seatCount: '座位数',
     FTonnage: '载重',
+    carFTonnage:'车辆载重',
     carColor:'车身颜色',
     carLength: '车身长度',
     FFuelType: '燃油类型',
@@ -79,7 +80,12 @@ const cn = {
     userExpirePermission: '用户过期控制',
     modulePermission: '模块权限',
     BSMenuSet: 'BS菜单设置',
-    appMenuSet:'APP菜单设置',
+    appMenuSet: 'APP菜单设置',
+    changePassword: '修改密码',
+    newPassword: '新密码',
+    oldPassword: '旧密码',
+    repeatPassword:'重复密码',
+    repeatPasswordErr: '重复密码不一致',
     fuelTypeList: [{
         value: 1,
         label: '汽油'
@@ -119,7 +125,9 @@ const cn = {
     addDevice: '新增设备',
     editDevice: '编辑设备',
     driverDetail: '司机详情',
+    mainVehicle:'主驾车辆',
     mainVehicleInfo: '主驾车辆信息',
+    copilotVehicle: '副驾车辆',
     copilotVehicleInfo: '副驾车辆信息',
     driverName: '司机姓名',
     FDrivingType: '驾驶证类型',
@@ -129,7 +137,8 @@ const cn = {
     FFrontURL: '驾驶证正面图',
     FReverseURL: '驾驶证背面图',
     addDriver: '新增司机',
-    editDriver:'编辑司机',
+    editDriver: '编辑司机',
+    remarks:'备注',
     layout: {
         'formName': '车联网云平台',
         'menus':[

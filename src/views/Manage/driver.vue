@@ -99,24 +99,24 @@
                         </el-input>
                     </el-form-item>
                     <!-- 驾驶证类型 -->
-                    <el-form-item :label="$t('FDrivingType')" prop="FDrivingType"  :rules="[{ required: true, message: $t('select')}]">
+                    <el-form-item :label="$t('FDrivingType')" prop="FDrivingType" >
                         <el-select v-model="addData.FDrivingType">
                             <el-option v-for="item in driverTypeList" :key="item.FDriverTypeID" :value="item.FDriverTypeID" :label="item.FDriverTypeName"></el-option>
                         </el-select>
                     </el-form-item>
                     <!-- 驾驶证号 -->
-                    <el-form-item :label="$t('FDrivingNumber')" prop="FDrivingNumber"  :rules="[{ required: true, message: $t('input')}]">
+                    <el-form-item :label="$t('FDrivingNumber')" prop="FDrivingNumber"  >
                         <el-input v-model="addData.FDrivingNumber">
                         </el-input>
                     </el-form-item>
                     <!-- 主驾车辆 -->
-                    <el-form-item :label="$t('bindingCar')" prop="FMainVehicleGUID" >
+                    <el-form-item :label="$t('mainVehicle')" prop="FMainVehicleGUID" >
                         <el-select v-model="addData.FMainVehicleGUID" filterable>
                             <el-option v-for="item in vehicleList" :key="item.FGUID" :value="item.FGUID" :label="item.FVehicleName"></el-option>
                         </el-select>
                     </el-form-item>
                     <!-- 副驾车辆 -->
-                    <el-form-item :label="$t('bindingCar')" prop="FCopilotVehicleGUID" >
+                    <el-form-item :label="$t('copilotVehicle')" prop="FCopilotVehicleGUID" >
                         <el-select v-model="addData.FCopilotVehicleGUID" filterable>
                             <el-option v-for="item in vehicleList" :key="item.FGUID" :value="item.FGUID" :label="item.FVehicleName"></el-option>
                         </el-select>
@@ -130,10 +130,9 @@
                         </div>
                         <el-upload
                           v-else
+                          action='/Web/CarCloud_Common'
                           list-type="picture-card"
                           :limit = '1'
-                          :on-success="handleSuccess"
-                          :data="{FAction:'UpLoadFile',FVersion:'1.0.0',FTokenID:token}"
                          >
                             <p><i class="el-icon-plus"></i><br><span>上传(160*60)</span></p>
                         </el-upload>                
@@ -147,10 +146,9 @@
                         </div>
                         <el-upload
                           v-else
+                          action='/Web/CarCloud_Common'
                           list-type="picture-card"
                           :limit = '1'
-                          :on-success="handleSuccess"
-                          :data="{FAction:'UpLoadFile',FVersion:'1.0.0',FTokenID:token}"
                          >
                             <p><i class="el-icon-plus"></i><br><span>上传(160*60)</span></p>
                         </el-upload>                
@@ -165,9 +163,8 @@
                         <el-upload
                           v-else
                           list-type="picture-card"
+                          action='/Web/CarCloud_Common'
                           :limit = '1'
-                          :on-success="handleSuccess"
-                          :data="{FAction:'UpLoadFile',FVersion:'1.0.0',FTokenID:token}"
                          >
                             <p><i class="el-icon-plus"></i><br><span>上传(160*60)</span></p>
                         </el-upload>                
@@ -180,7 +177,7 @@
                 </el-form>
                 <div class="submit" slot="footer">
                     <el-button type="primary" @click="show =false">{{$t('cancle')}}</el-button>
-                    <el-button type="primary">{{$t('submit')}}</el-button>
+                    <el-button type="primary" @click="addOrUpdate()">{{$t('submit')}}</el-button>
                 </div>
             </el-dialog>
             <el-dialog class="my-dialog" width="1260px" top="30px" :modal="false" :visible.sync="show1">
@@ -222,15 +219,24 @@
                 <div>
                     <ul class="driver-image-list">
                         <li>
-                            <div><img :src="driverDetail.FHeadURL" :alt="$t('driverHeadImg')"></div>
+                            <div>
+                                <img v-if="driverDetail.FHeadURL" :src="driverDetail.FHeadURL" :alt="$t('driverHeadImg')">
+                                <img v-else src="@/assets/images/no-image.jpg" alt="">
+                            </div>
                             <p class="img-label">{{$t('driverHeadImg')}}</p>
                         </li>
                         <li>
-                            <div><img :src="driverDetail.FFrontURL" :alt="$t('FFrontURL')"></div>
+                            <div>
+                                <img v-if="driverDetail.FFrontURL" :src="driverDetail.FFrontURL" :alt="$t('FFrontURL')">
+                                <img v-else src="@/assets/images/no-image.jpg" alt="">
+                            </div>
                             <p class="img-label">{{$t('FFrontURL')}}</p>
                         </li>
                         <li>
-                            <div><img :src="driverDetail.FReverseURL" :alt="$t('FReverseURL')"></div>
+                            <div>
+                                <img v-if="driverDetail.FReverseURL" :src="driverDetail.FReverseURL" :alt="$t('FReverseURL')">
+                                <img v-else src="@/assets/images/no-image.jpg" alt="">
+                            </div>
                             <p class="img-label">{{$t('FReverseURL')}}</p>
                         </li>
                     </ul>
@@ -336,39 +342,26 @@ export default {
             driverTypeList:[], //车辆类型
             searchKey:"",
             guid:"",
+            file:'',
             formatDate:formatDate,
             checkRows:[],
+            companyData:[],
             currentCompany:{ //当前选中的公司
             },
             defaultAddData:{},
             addData:{
                 FGUID:'',
-                FVehicleName:'',
-                FVehicleCode:'',
-                FAssetGUID:'',
-                FVIN:'',
-                FEngineNumber:'',
-                FVehicleTypeID:'',
-                FSeatCount:'',
-                FTonnage:'',
-                FColorRGB:'#ffffff',
-                FLength:'',
-                FFuelType:'',
-                FInsuCompany:'',
-                FInsuDate:'',
-                FPurchaseDate:'',
-                FOperPermNumber:'',
-                FRoadTranNumber:'',
-                FRoadTranDate:'',
-                FTechRegDate:'',
+                FHeadURL:'',
+                FDriverName:'',
+                FDrivingNumber:'',
+                FDrivingType:'',
+                FFrontURL:'',
+                FReverseURL:'',
+                FPhoneNumber:'',
                 FDescription:'',
-                FImage:'',
-                FVehicleImgType:'car-img1',
                 FAgentGUID:'',
-                FGroupGUID:'',
-                FOperateType:'',
-                FMainDriverGUID:'',
-                FCopilotDriverGUID:''
+                FMainVehicleGUID:'',
+                FCopilotVehicleGUID:'',
             },
             driverDetail:{},
             vehicleList:[],
@@ -389,12 +382,11 @@ export default {
         this.FTelephoneRule = {required: true, validator: phoneNumbre}
         this.defaultAddData = {...this.addData}
         this.defaultAddTeam = {...this.addTeam}
-        this.queryCompanyTree()
-        this.queryAdminDriverType()  
+        this.queryCompanyTree()  
     },
     methods:{
         /**
-         * 3.7.1 查询账户管理的公司及分组树
+         * 3.7.1 查询账户管理的公司
          */
         queryCompanyTree(){
             Common({
@@ -405,8 +397,9 @@ export default {
                 if(this.companyData&&this.companyData[0]){
                     this.guid = this.companyData[0].FGUID
                     this.queryData()
+                    this.queryAdminDriverType()
                     this.$nextTick(() =>{
-                        /* this.$refs.tree.setCurrentKey(this.guid) */
+                        this.$refs.tree.setCurrentKey(this.guid)
                     })
                 }
             }).catch((err) => {
@@ -457,7 +450,8 @@ export default {
          */
         queryAdminDriverType(){
             User({
-                FAction:'QueryAdminDriverType'
+                FAction:'QueryAdminDriverType',
+                FAgentGUID:this.guid 
             })
             .then((result) => {
                 this.driverTypeList = result.FObject
@@ -515,9 +509,9 @@ export default {
                 });
             })
             if(this.addData.FGUID !==''){
-                action = 'UpdateAdminVehicle'
+                action = 'UpdateAdminDriver'
             }else{
-                action = 'AddAdminVehicle'
+                action = 'AddAdminDriver'
             }
             User({
                 FAction:action,
@@ -533,7 +527,7 @@ export default {
                 })
             })
             .catch(err => {
-                cosole.log(err)
+                console.log(err)
                 this.$message({
                     message:this.$t('error'),
                     type:'error',

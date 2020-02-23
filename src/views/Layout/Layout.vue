@@ -1,6 +1,34 @@
 <template>
     <div class="layout">
         <header class="layout-header">
+            <ul class="layout-header-icon-list">
+                <li class="icon-circle">
+                    <i class="iconfont icon-Itsmine"></i>
+                </li>
+                <li class="user-name-dropdown">
+                    <el-dropdown>
+                      <span class="el-dropdown-link">
+                        张大大<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>修改密码</el-dropdown-item>
+                        <el-dropdown-item @click.native="logOut">退出登录</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                </li>
+                <li class="icon-circle">
+                    <i class="iconfont icon-Alert"></i>
+                </li>
+                <li class="icon-circle">
+                    <i class="iconfont icon-Updatecalendar"></i>
+                </li>
+                <li class="icon-circle">
+                    <i class="iconfont icon-News"></i>
+                </li>
+                <li class="icon-circle">
+                    <i class="iconfont icon-Customerservice"></i>
+                </li>
+            </ul>
             <canvas id="canvas" style="position: absolute; z-index: -1; left: 0px;"></canvas>
             <div class="logo flex">
                 <img src="" alt="">
@@ -235,6 +263,9 @@ export default {
             .catch(err => {
                 console.log(err)
             })
+        },
+        logOut(){
+            this.$router.push('/login')
         }
     }
 }
@@ -250,6 +281,39 @@ export default {
         background:#000B21;
         position: relative;
         z-index: 10;
+        &-icon-list{
+            display: flex;
+            position: absolute;
+            top: 13px;
+            right: 68px;
+            align-items: center;
+            .icon-circle{
+                width:30px;
+                height:30px;
+                line-height: 30px;
+                margin-left: 13px;
+                background:rgba(0,255,249,0.2);
+                box-shadow:0px 3px 7px 0px rgba(0, 0, 0, 0.35);
+                border-radius:50%;
+                color: #00FFF9;
+                font-size: 18px;
+            }
+            .user-name-dropdown{
+                margin-left: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                .el-dropdown{
+                    color: white;
+                    .el-icon-arrow-down{
+                        font-size: 18px;
+                        color: #00FFF9
+                    }
+                    .el-icon-arrow-down:before{
+                        content:"\E790"
+                    }
+                }
+            }
+        }
         .logo{
             position: absolute;
             align-items: center;

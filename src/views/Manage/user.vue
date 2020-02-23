@@ -17,15 +17,15 @@
                      highlight-current
                      :expand-on-click-node="false"
                      :props="defaultProps"
-                     @node-click="queryUserInfo"
+                     @node-click="nodeClick"
                     >
                         <template slot-scope="{ node, data }">
                             <div class="node-item">
-                                <div class="node-item-label" @click="queryuserInfo(data)">
+                                <div class="node-item-label">
                                     <span>{{data.FUserName}}</span>
                                 </div>
                                 <div class="r">
-                                    <i class="iconfont icon-Changethepassword"></i>
+                                    <i class="iconfont icon-Changethepassword" @click.stop="changePassword(node)"></i>
                                     <i v-if="node.level>1" class="iconfont icon-Edit" @click="editNode(data)" :title="$t('edit')"></i>
                                     <i v-if="node.level>1" class="iconfont icon-Rubbish" @click.stop="deleteNode(data)" :title="$t('delete')"></i>
                                 </div>
@@ -38,7 +38,7 @@
         <div class="company-main height-100">
             <div class="company-main-default  height-100">
                 <h5 class="title-icon">{{$t('basicInfo')}}</h5>
-                <div class="company-detail">
+                <div class="company-detail" style="height:212px;">
                     <ul class="flex">
                         <li :style="{width:item.width}" v-for="(item,i) in $t('userManage.basicInfo')" :key="i">
                             <span class="label">{{item.label}}：</span>{{item.formatter?item.formatter(userInfo[item.prop]):userInfo[item.prop]}}
@@ -47,7 +47,7 @@
                 </div>
                 <div class="table-container" style="height:618px;">
                     <div class="flex table-container-header">
-                        <el-input v-model="searchKey">
+                        <el-input v-model="searchKey" @change="queryData">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                         <el-select v-model="queryType" :placeholder="$t('select')" @change="queryData()">
@@ -99,6 +99,7 @@
                     </div>
                 </div>
             </div>
+            <!-- 新增修改用户 -->
             <div class="add-company add-user-box  height-100" v-if="show">
                 <h5 class="title-icon">
                     {{$t('basicInfo')}}
@@ -113,11 +114,12 @@
                             <el-input  v-model="addData.FUserName">
                             </el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('manageCompany')" prop="FAgentGUIDs">
-                            <el-input  v-model="addData.FAgentGUIDs">
-                            </el-input>
+                        <el-form-item :label="$t('manageCompany')" prop="FAgentGUIDs" :rules="[{ required: true, message: $t('select')}]">
+                            <el-select v-model="addData.FAgentGUIDs">
+                                <el-option v-for="item in companyList" :key="item.FGUID" :value="item.FGUID" :label="item.FName"></el-option>
+                            </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('expireTime')" prop="FExpireTime">
+                        <el-form-item :label="$t('expireTime')" prop="FExpireTime" :rules="[{ required: true, message: $t('select')}]">
                              <el-date-picker
                               v-model="addData.FExpireTime"
                               type="date"
@@ -136,7 +138,7 @@
                             <el-input  v-model="addData.FEMailAddress">
                             </el-input>
                         </el-form-item>
-                        <el-form-item  :label="$t('describe')" style="width:100%"  prop="FDescribe" >
+                        <el-form-item  :label="$t('remarks')" style="width:100%"  prop="FDescribe" >
                             <el-input class="describe" type="textarea" v-model="addData.FDescribe">
                             </el-input>
                         </el-form-item>
@@ -215,30 +217,31 @@
                     </div>
                 </div>
             </div>
+            <!-- 修改密码 -->
             <div class="add-company  height-100" v-if="show1">
-                <div class="add-form">
-                    <el-form :model="addTeam" inline ref="form">
-                        <h5 class="title-icon">{{addTeam.FGUID?$t('editCarTeam'):$t('addCarTeam')}}</h5>
-                        <el-form-item :label="$t('carTeamName')" prop="FGroupName"  :rules="[{ required: true, message: $t('input')}]">
-                            <el-input  v-model="addTeam.FGroupName">
+                <div class="add-form height-100">
+                    <h5 class="title-icon">{{$t('changePassword')}}</h5>
+                    <el-form :model="changeFormData" inline ref="changeForm">
+                        <el-form-item :label="$t('userName')" prop="FUserName">
+                            <el-input readonly v-model="changeFormData.FUserName">
                             </el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item :label="$t('contact')" prop="FContacts"  :rules="[{ required: true, message: $t('input')}]">
-                            <el-input  v-model="addTeam.FContacts">
+                        <el-form-item style="width:100%" v-if="changeNode.level == 1" :label="$t('oldPassword')" prop="FOldPassword"  :rules="[{ required: true, message: $t('input')}]">
+                            <el-input type="password" show-password  v-model="changeFormData.FOldPassword">
                             </el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('telephone')" prop="FTelephone"  :rules="FTelephoneRule">
-                            <el-input  v-model="addTeam.FTelephone">
+                        <el-form-item :label="$t('newPassword')" prop="FPassword"  :rules="[{ required: true, message: $t('input')}]">
+                            <el-input type="password" show-password  v-model="changeFormData.FPassword">
                             </el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('email')" prop="FEMailAddress" >
-                            <el-input  v-model="addTeam.FEMailAddress">
+                        </el-form-item><br>
+                        <el-form-item :label="$t('repeatPassword')" prop="repeatPassword" :rules="[{ required: true, message: $t('input')}]">
+                            <el-input type="password" show-password  v-model="changeFormData.repeatPassword">
                             </el-input>
                         </el-form-item>
                     </el-form>
-                    <div class="add-form-footer">
-                        <el-button class="save" @click='addOrUpdateTeam()'>{{$t('save')}}</el-button>
+                    <div class="add-form-footer" style="text-align:left;padding-left:100px;">
+                        <el-button class="save" @click='submitChange'>{{$t('save')}}</el-button>
                         <el-button class="cancle" @click='show1 = false'>{{$t('cancle')}}</el-button>
                     </div>
                 </div>
@@ -267,10 +270,7 @@ export default {
             userInfo:{},
             queryType:1,
             searchKey:"",
-            guid:"",
-            timeType:0,
-            hour:8,
-            minute:0,
+            companyList:[],
             currentNode:{ //当前选中的节点
             },
             FTelephoneRule:[], //联系方式规则
@@ -300,13 +300,13 @@ export default {
                 FAppMenuGUIDs:'',
                 FAgentGUIDs:''
             },
-            defaultAddTeam:{},
-            addTeam:{
-                FGUID:'',
-                FGroupName:'',
-                FContacts:'',
-                FTelephone:'',
-                FEMailAddress:''
+            changeNode:{},//修改密码的节点
+            changeFormData:{ //修改密码
+                FGUIDs:'',
+                FUserName:'',
+                FPassword:'',
+                repeatPassword:'',
+                FOldPassword:'',
             }
         }
     },
@@ -327,6 +327,7 @@ export default {
         this.queryAdminUserTree()  
         this.queryData()
         this.getMenus()
+        this.queryCompanyTree()
     },
     methods:{
         /**
@@ -343,6 +344,28 @@ export default {
                 }
             }).catch((err) => {
                 console.log(err)
+            });
+        },
+        getCompany(data) {
+            data.forEach(item => {
+                this.companyList.push(item)
+                if(item.FChild){
+                    this.getCompany(item.FChild)
+                }
+            })
+        },
+        /**
+         * 3.7.1 查询账户管理的公司
+         */
+        queryCompanyTree(){
+            Common({
+                FAction:'QuerySuperAdminAgentTree',
+            })
+            .then((result) => {
+                let data = result.FObject
+                this.getCompany(data)
+            }).catch((err) => {
+                
             });
         },
         /**
@@ -476,44 +499,8 @@ export default {
                 })
             })   
         },
-        beforeAddTeam(data){
-            this.addTeam = {...this.defaultAddTeam}
-            this.currentCompany = data
-            this.show = false
-            this.show1 = true
-        },
-        /**
-         * 新增修改车队
-         */
-        addOrUpdateTeam(){
-            let action
-            if(this.addTeam.FGUID !==''){
-                action = 'UpdateAdminGroup'
-            }else{
-                action = 'AddAdminGroup'
-            }
-            User({
-                FAction:action,
-                FAgentGUID:this.currentCompany.FGUID,
-                FT_Group:this.addTeam
-            },true)
-            .then(result => {
-                this.queryCompanyTree()
-                this.$message({
-                    message:this.$t('success'),
-                    type:'success',
-                    duration:'500'
-                })
-            })
-            .catch(err => {
-                this.$message({
-                    message:this.$t('error'),
-                    type:'error',
-                    duration:'500'
-                })
-            })   
-        },
         async editNode(data){
+            this.show1 = false
             this.show = true
             this.$nextTick(() => {
                 this.$refs.menuTree.setCheckedKeys([])
@@ -523,7 +510,12 @@ export default {
             Object.keys(this.addData).forEach(key => {
                 this.addData[key] = this.userInfo[key]||''
             })
+            this.addData.FAgentGUIDs = this.userInfo.FAgentGUID
+            this.addData.FPassword = '123456'
             this.translatePermission()
+        },
+        nodeClick(data){
+            this.queryUserInfo(data)
         },
         /**
          * 3.2.4 查询用户详情
@@ -550,6 +542,9 @@ export default {
                 });
             })
         },
+        /**
+         * 修改用户状态
+         */
         updateAdminUserStatus(row){
             User({
                 FAction:'UpdateAdminUserStatus',
@@ -562,6 +557,70 @@ export default {
                 row.FStatus = !row.FStatus
             });
         },
+        changePassword(node){
+            this.changeNode = node
+            this.show = false
+            this.show1 = true
+            this.changeFormData.FUserName = node.data.FUserName
+            this.changeFormData.FGUIDs = node.data.FGUID
+        },
+        async submitChange(){
+            await new Promise(resolve => {
+                 this.$refs.changeForm.validate((valid) => {
+                  if (valid) {
+                      resolve()
+                  } 
+                });
+            })
+            if(this.changeFormData.FPassword != this.changeFormData.repeatPassword){
+                this.$message({
+                    message:this.$t('repeatPasswordErr'),
+                    type:'success',
+                    duration:'500'
+                })
+                return
+            }
+            let changeFun
+            if(this.changeNode.level == 1){
+                changeFun = this.updateAdminLoginUserPassword
+            }else{
+                changeFun = this.updateAdminUserPassword
+            }
+            changeFun()
+            .then((result) => {
+                this.$message({
+                    message:this.$t('success'),
+                    type:'success',
+                    duration:'500'
+                })
+            }).catch((err) => {
+                this.$message({
+                    message:this.$t('error'),
+                    type:'error',
+                    duration:'500'
+                })
+            });
+        },
+        /**
+         * 3.6.9 修改子用户密码
+         */
+        updateAdminUserPassword(){
+            return User({
+                FAction:"UpdateAdminUserPassword",
+                FGUIDs:this.changeFormData.FGUIDs,
+                FPassword:Md5(this.changeFormData.FPassword)
+            })
+        },
+        /**
+         * 3.6.10 修改登陆用户密码
+         */
+        updateAdminLoginUserPassword(){
+            return User({
+                FAction:'UpdateAdminLoginUserPassword',
+                FOldPassword:Md5(this.changeFormData.FOldPassword),
+                FNewPassword:Md5(this.changeFormData.FPassword)
+            })
+        },
         async deleteNode(data){
             await this.beforeDelete()
             User({
@@ -573,14 +632,14 @@ export default {
                 this.queryAdminUserTree()
                 this.queryData()
                 this.$message({
-                    message:'删除成功',
+                    message:this.$t('success'),
                     type:'success',
                     duration:'500'
                 })
             })
             .catch(err =>  {
                 this.$message({
-                    message:'删除失败',
+                    message:this.$t('err'),
                     type:'error',
                     duration:'500'
                 })

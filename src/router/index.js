@@ -15,11 +15,49 @@ const routes = [
     component: () => import('@/views/Layout/Layout.vue'),
     children: [
       {
-        path: '/monitor',
-        component: () => import( '@/views/Layout/common.vue'),
+        path: '/monitor', //监控中心
+        component: () => import('@/views/Layout/common.vue'),
+        children: [
+          {
+            path: '*',
+            component: () => import('@/views/Layout/common.vue'),
+          }
+        ]
       },
       {
-        path: '/manage',
+        path: '/GISService', //GIS服务
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/traffic', //干线运输
+        component: () => import('@/views/Layout/common.vue'), 
+      },
+      {
+        path: '/alarmCenter', //报警中心
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/eventMessage', //事件消息
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/report', //报表
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/config', //配置中心
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/cmd', //指令
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/extraService', //增值服务
+        component: () => import('@/views/Layout/common.vue'),
+      },
+      {
+        path: '/manage', 
         name: 'manage',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route

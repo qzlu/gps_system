@@ -4,12 +4,12 @@ module.exports = {
     devServer: {
         proxy: {
           '/Web': {
-            target: 'http://39.108.194.238:56080',
+            target: 'http://39.108.194.238:56081',
             ws: false,
             changeOrigin: true,
-            pathRewrite: {
+/*             pathRewrite: {
                 '^/Web': '/'
-              }
+              } */
           }
         }
     },

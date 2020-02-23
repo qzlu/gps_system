@@ -21,8 +21,8 @@
                         <template slot-scope="{ node, data }">
                             <div class="node-item">
                                 <div class="node-item-label">
-                                    <i :class="['iconfont',{'icon-Company':data.FNType == 1}]" ></i>
-                                    <i :class="['iconfont',{'icon-Motorcade':data.FNType == 0}]" ></i>
+                                    <i :class="['iconfont','icon-Company']" ></i>
+                                    <!-- <i :class="['iconfont',{'icon-Motorcade':data.FNType == 0}]" ></i> -->
                                     <span>{{data.FName}}</span>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                            <div class="column-operation">
                                <i class="iconfont icon-Edit" @click="editRow(scoped.row)"></i>
                                <i class="iconfont icon-Rubbish" @click="deleteRow(scoped.row.FGUID)"></i>
-                               <i class="iconfont icon-Hint" @click="queryAdminVehicleByFGUID(scoped.row)"></i>
+                               <i class="iconfont icon-Hint" @click="show1=true;queryAdminVehicleByFGUID(scoped.row)"></i>
                            </div>
                        </template>
                    </el-table-column>
@@ -85,7 +85,7 @@
                 </el-table>
                 <pagination @pageIndexChange='handleCurrentChange' :pageIndex='pageIndex' :total='total'></pagination>
             </div>
-            <el-dialog class="my-dialog" width="1260px"  :close-on-click-modal="false" :modal="false" :visible.sync="show">
+            <el-dialog class="my-dialog" width="1260px" top="30px"  :close-on-click-modal="false" :modal="false" :visible.sync="show">
                 <h4 class="title">
                     <span>{{addData.FGUID == ''?$t('add')+$t('car'):$t('edit')+$t('car')}}</span>
                 </h4>
@@ -110,12 +110,12 @@
                         </el-select>
                     </el-form-item>
                     <!-- 发动机号 -->
-                    <el-form-item :label="$t('FEngineNumber')" prop="FEngineNumber"  :rules="[{ required: true, message: $t('input')}]">
+                    <el-form-item :label="$t('FEngineNumber')" prop="FEngineNumber" >
                         <el-input v-model="addData.FEngineNumber">
                         </el-input>
                     </el-form-item>
                     <!-- 车架号 -->
-                    <el-form-item :label="$t('FVIN')" prop="FVIN"  :rules="[{ required: true, message: $t('input')}]">
+                    <el-form-item :label="$t('FVIN')" prop="FVIN" >
                         <el-input v-model="addData.FVIN">
                         </el-input>
                     </el-form-item>
@@ -220,10 +220,14 @@
                         </div>
                         <el-upload
                           v-else
+                          action='/Web/CarCloud_Common'
                           list-type="picture-card"
                           :limit = '1'
-                          :on-success="handleSuccess"
-                          :data="{FAction:'UpLoadFile',FVersion:'1.0.0',FTokenID:token}"
+                          :multiple="false"
+                          :show-file-list="false"
+                          :before-upload="beforeUpload"
+                          :http-request="uploadImg"
+                          :on-success="uploadSuccess"
                          >
                             <p><i class="el-icon-plus"></i><br><span>上传(160*60)</span></p>
                         </el-upload>                
@@ -232,26 +236,27 @@
                         <span>{{$t('bindingInfo')}}</span>
                     </h5>
                     <!-- 设备标识 -->
-                    <el-form-item :label="$t('deviceName')" prop="FAssetGUID"  :rules="[{ required: true, message: $t('input')}]">
-                        <el-input v-model="addData.FAssetGUID">
-                        </el-input>
+                    <el-form-item :label="$t('deviceID')" prop="FAssetGUID" >
+                        <el-select v-model="addData.FAssetGUID" filterable>
+                            <el-option v-for="item in deviceList" :key="item.FGUID" :value="item.FAssetID" :label="item.FAssetID"></el-option>
+                        </el-select>
                     </el-form-item>
                     <!-- 车队名称 -->
-                    <el-form-item :label="$t('carTeamName')" prop="FGroupGUID" >
+                    <el-form-item :label="$t('carTeamName')" prop="FGroupGUID" :rules="[{ required: true, message: $t('select')}]">
                         <el-select v-model="addData.FGroupGUID">
-                            <el-option v-for="(item,key) in $t('operateObj')" :key="key" :value="key" :label="item"></el-option>
+                            <el-option v-for="(item,key) in carTeamList" :key="key" :value="item.FGUID" :label="item.FGroupName"></el-option>
                         </el-select>
                     </el-form-item><br>
                     <!-- 主驾司机 -->
                     <el-form-item :label="$t('mainDriver')" prop="FMainDriverGUID" >
                         <el-select v-model="addData.FMainDriverGUID">
-                            <el-option v-for="(item,key) in $t('operateObj')" :key="key" :value="key" :label="item"></el-option>
+                            <el-option v-for="item in driverList" :key="item.FGUID" :value="item.FGUID" :label="item.FDriverName"></el-option>
                         </el-select>
                     </el-form-item>
                     <!-- 副驾司机 -->
                     <el-form-item :label="$t('copilotDriver')" prop="FCopilotDriverGUID" >
                         <el-select v-model="addData.FCopilotDriverGUID">
-                            <el-option v-for="(item,key) in $t('operateObj')" :key="key" :value="key" :label="item"></el-option>
+                            <el-option v-for="item in driverList" :key="item.FGUID" :value="item.FGUID" :label="item.FDriverName"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -384,6 +389,30 @@
                             <span class="value">{{$t('operateObj')[carDetail.FOperateType]||$t('else')}}</span>
                         </li>
                     </ul>
+                    <div class="car-image-box">
+                        <div class="car-iamge-content">
+                            <img v-if="carDetail.FImage" :src="carDetail.FImage" alt="">
+                            <img v-else src="@/assets/images/no-image.jpg" alt="">
+                        </div>
+                        <ul class="car-params">
+                            <li>
+                                <span class="label">{{$t('carColor')}}</span>
+                                <span class="color-bar" :style="{background:carDetail.FColorRGB}"></span>
+                            </li>
+                            <li>
+                                <span class="label">{{$t('carLength')}}</span>
+                                <span>{{carDetail.FLength||'--'}}M</span>
+                            </li>
+                            <li>
+                                <span class="label">{{$t('carFTonnage')}}</span>
+                                <span>{{carDetail.FTonnage||'--'}}KG</span>
+                            </li>
+                            <li>
+                                <span class="label">{{$t('carIcon')}}</span>
+                                <span :class="['car-icon',carDetail.FVehicleImgType||'car-img1']"></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <h5 class="item-title">
                     <span>{{$t('deviceInfo')}}</span>
@@ -444,6 +473,7 @@ import {User,Common} from '@/request/api.js'
 import table from '@/mixins/table.js' //表格混入数据
 import formatDate from '@/utils/formatDate.js'
 import './company.scss'
+import axios from 'axios'
 export default {
     mixins:[table],
     data(){
@@ -496,21 +526,28 @@ export default {
                 FMainDriverGUID:'',
                 FCopilotDriverGUID:''
             },
-            carDetail:{}
+            carDetail:{},
+            deviceList:[],//设备列表
+            carTeamList:[], //车队列表
+            driverList:[],//司机列表
         }
     },
     created(){
         this.defaultAddData = {...this.addData}
         this.queryCompanyTree()
-        this.queryAdminVehicleType()  
+        this.queryAdminVehicleType()
+        if (!window.FileReader) {
+          console.error('Your browser does not support FileReader API!')
+        }
+        this.fileReader = new FileReader()  
     },
     methods:{
         /**
-         * 3.7.1 查询账户管理的公司及分组树
+         * 3.7.1 查询账户管理的公司
          */
         queryCompanyTree(){
             Common({
-                FAction:'QuerySuperAdminAgentGroupTree',
+                FAction:'QuerySuperAdminAgentTree',
             })
             .then((result) => {
                 this.companyData = result.FObject
@@ -578,21 +615,70 @@ export default {
             });
         },
         /**
+         * 根据公司GUID查询设备列表
+         */
+        queryAdminAssetComboBox(){
+            User({
+                FAction:'QueryAdminAssetComboBox',
+                FAgentGUID:this.addData.FAgentGUID
+            })
+            .then((result) => {
+                this.deviceList = result.FObject
+            }).catch((err) => {
+                
+            });
+        },
+        /**
+         * 根据公司GUID查询车队
+         */
+        queryAdminGroupComboBox(){
+            User({
+                FAction:'QueryAdminGroupComboBox',
+                FAgentGUID:this.addData.FAgentGUID
+            })
+            .then((result) => {
+                this.carTeamList = result.FObject
+            }).catch((err) => {
+                
+            });
+        },
+        /**
+         * 根据公司GUID查询司机列表
+         */
+        queryAdminMainDriverComboBox(){
+            User({
+                FAction:'QueryAdminMainDriverComboBox',
+                FAgentGUID:this.addData.FAgentGUID
+            })
+            .then((result) => {
+                this.driverList = result.FObject
+            }).catch((err) => {
+                
+            });
+        },
+        /**
          * 
          */
-        beforeAdd(data){
+        beforeAdd(){
             this.addData = {...this.defaultAddData}
             this.addData.FAgentGUID = this.guid
             this.show = true
+            this.queryAdminAssetComboBox()
+            this.queryAdminGroupComboBox()
+            this.queryAdminMainDriverComboBox()
         },
         /**
          * 编辑
          */
         async editRow(row){
-            Object.keys(this.addData).forEach(key => {
-                this.addData[key] = row[key]||''
-            })
             this.show = true
+            await this.queryAdminVehicleByFGUID(row)
+            Object.keys(this.addData).forEach(key => {
+                this.addData[key] = this.carDetail[key]||''
+            })
+            this.queryAdminAssetComboBox()
+            this.queryAdminGroupComboBox()
+            this.queryAdminMainDriverComboBox()
         },
         /**
          * 新增或修改
@@ -637,16 +723,70 @@ export default {
          * 3.3.4 查询车辆详情
          */
         queryAdminVehicleByFGUID(row){
-            this.show1 = true
-            User({
-                FAction:"QueryAdminVehicleByFGUID",
-                FGUID:row.FGUID
+            return new Promise((resolve,reject) => {
+                User({
+                    FAction:"QueryAdminVehicleByFGUID",
+                    FGUID:row.FGUID
+                })
+                .then((result) => {
+                    this.carDetail = result.FObject[0]||{}
+                    resolve()
+                }).catch((err) => {
+                    this.carDetail = {}
+                    reject()
+                });
             })
-            .then((result) => {
-                this.carDetail = result.FObject[0]||{}
-            }).catch((err) => {
-                this.carDetail = {}
-            });
+        },
+        beforeUpload (file) {
+          const isLt5M = file.size < 5 * 1024 * 1024
+          if (!isLt5M) {
+            this.$message
+            this.$message({
+                message:'The max size is 5MB',
+                type:'error',
+                duration:'500'
+            })
+            return false
+          }
+        },
+        uploadImg(options){
+            let file = options.file
+            let filename = file.name
+            if (file) {
+              this.fileReader.readAsDataURL(file)
+            }
+            this.fileReader.onload = () => {
+              let base64Str = this.fileReader.result
+              let config = {
+                url: '/Web/CarCloud_Common',
+                method: 'post',
+                data: {
+                  FAction:"UpLoadPicture",
+                  FDirectory:`Vehicle/`,
+                  FPicture: base64Str.split(',')[1],
+                  FTokenID: localStorage.getItem('FToken')
+                },
+                timeout: 10000,
+                onUploadProgress: function (progressEvent) {
+                  // console.log(progressEvent)
+                  progressEvent.percent = progressEvent.loaded / progressEvent.total * 100
+                  options.onProgress(progressEvent, file)
+                },
+              }
+              axios(config)
+                .then(res => {
+                  options.onSuccess(res, file)
+                })
+                .catch(err => {
+                  options.onError(err)
+                })
+            }
+        },
+        uploadSuccess (res, file, fileList) {
+          let data = res.data
+          console.log('upload result:', res, file)
+         /*  file.key = data.key
+          this.fileList.push(data.key) */
         },
         handleSelectionChange(rows){
             this.checkRows = rows
@@ -752,5 +892,37 @@ $car-img:'../../assets/images/marker/';
 }
 .car-img11{
     background: url(#{$car-img}car-img11.png) no-repeat;
+}
+.my-dialog{
+    .el-dialog{
+        &__body{
+            div.car-image-box{
+                margin-left: 800px;
+                .car-iamge-content{
+                    width: 350px;
+                    height: 180px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .car-params{
+                    margin-top: 10px;
+                    li{
+                        display: inline-block;
+                        width: 50%;
+                        text-align: left;
+                        line-height: 50px;
+                        .color-bar{
+                            display: inline-block;
+                            width:77px;
+                            height:10px;
+                            background:rgba(235,97,0,1);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 </style>
