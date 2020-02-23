@@ -1,0 +1,70 @@
+.el-table-header {
+    height: 46px;
+}
+
+.el-table__empty-block {
+
+    // background: #134FA4;
+    .el-table__empty-text {
+        color: #666666;
+    }
+}
+
+.el-table {
+    background: none;
+    th {
+        font-size: 18px;
+        font-weight: normal;
+        background: #00858D !important;
+        color: #FFFFFF;
+        text-align: center !important;
+    }
+
+    td {
+        height: 46px;
+        line-height: 46px;
+        padding: 0px !important;
+        text-align: center !important;
+        .column-operation{
+            color: #00858D;
+            font-size: 18px;
+            .iconfont{
+                cursor: pointer;
+            }
+            .iconfont+.iconfont{
+                margin-left: 16px;
+            }
+        }   
+    }
+
+    td,
+    th.is-leaf {
+        border: none !important
+    }
+
+    &::before {
+        display: none;
+    }
+
+    tr {
+        font-size: 16px;
+        color: #666666;
+        background: none;
+    }
+
+    .odd-row {
+        background: #F5F5F5;
+    }
+
+    .even-row {
+        background: #FFFFFF
+    }
+
+    &--enable-row-hover &__body tr:hover>td {
+        background: rgba($color: #00858d, $alpha: 0.5);
+        color: white;
+        /* opacity:0.5; */
+        /*  color: #2A91FC; */
+    }
+
+}

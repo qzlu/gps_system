@@ -1,4 +1,9 @@
-import MyMap from './Map'
+
+const MyMap = () => import('./Map')
+const Table = () => import('./Table')
+const pagination = () => import('./pagination')
 export {
-    MyMap
+    MyMap,
+    Table,
+    pagination
 }

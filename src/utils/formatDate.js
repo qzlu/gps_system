@@ -8,7 +8,9 @@ export default function (date, fmt = 'YYYY-MM-DD HH:mm:ss') {
     if (typeof date === 'number') {
       date = new Date(date)
     } */
-    date = new Date(date)
+  //UTC 时间转换成本地时间（该项目采用UTC时间）
+    let diffTime = new Date().getTimezoneOffset()
+    date = new Date(Date.parse(date) - diffTime * 60 * 1000)
     var o = {
       'M+': date.getMonth() + 1,
       'D+': date.getDate(),

@@ -368,6 +368,111 @@
       "font_class": "Transfer",
       "unicode": "e636",
       "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "13082982",
+      "name": "Motorcade",
+      "font_class": "Motorcade",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "13131026",
+      "name": "Added",
+      "font_class": "Added",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "13131027",
+      "name": "Change the password",
+      "font_class": "Changethepassword",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "13131028",
+      "name": "Bindings",
+      "font_class": "Bindings",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "13131029",
+      "name": "End",
+      "font_class": "End",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "13131030",
+      "name": "Lock2",
+      "font_class": "Lock1",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "13131031",
+      "name": "Credit Card",
+      "font_class": "CreditCard",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "13131032",
+      "name": "Maximizes",
+      "font_class": "Maximizes",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "13131033",
+      "name": "Save",
+      "font_class": "Save",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "13131034",
+      "name": "Hint",
+      "font_class": "Hint",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "13131035",
+      "name": "Play it",
+      "font_class": "Playit",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "13131036",
+      "name": "Fuel tank",
+      "font_class": "Fueltank",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "13131037",
+      "name": "Screen",
+      "font_class": "Screen",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "13131038",
+      "name": "Refresh",
+      "font_class": "Refresh",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "13131074",
+      "name": "Plus",
+      "font_class": "Plus",
+      "unicode": "e645",
+      "unicode_decimal": 58949
     }
   ]
 }

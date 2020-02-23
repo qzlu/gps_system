@@ -29,8 +29,8 @@ export default {
   },
   methods:{
     getHeight(){
-      this.ratioWidth = window.innerWidth/1366
-      this.ratioHeigt=window.innerHeight/768
+      this.ratioWidth = window.innerWidth/1920
+      this.ratioHeigt=window.innerHeight/1080
     }
   }
 }
@@ -45,6 +45,7 @@ export default {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
+  font-size: 14px;
   -webkit-transform-style: preserve-3d;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;

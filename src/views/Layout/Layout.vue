@@ -2,34 +2,38 @@
     <div class="layout">
         <header class="layout-header">
             <canvas id="canvas" style="position: absolute; z-index: -1; left: 0px;"></canvas>
-            <div class="logo">
+            <div class="logo flex">
                 <img src="" alt="">
                 <span class="system-name">{{$t('layout.formName')}}</span>
             </div>
             <ul class="menu"> 
-                <li class="menu-item" v-for="(item,i) in menus" :key="i">
-                    <router-link :to="item.path">{{item.name}}</router-link>
-                    <ul class="menu-children" v-if="item.chirdren">
-                        <li class="menu-children-item" v-for="(obj,j) in item.chirdren" :key="j">
-                            <router-link :to="obj.path">{{item.name}}</router-link>
-                            
+                <li class="menu-item" v-for="(item,i) in menus" :key="i"  @click="changeRoute(i)">
+                    <router-link :to="item.path||'/manage'">{{item.FMenuName}}</router-link>
+                    <ul class="menu-children" v-if="item.children&&item.children.length>0">
+                        <li class="menu-children-item" v-for="(obj,j) in item.children" :key="j">
+                            <router-link :to="obj.path||'/manage'">{{obj.FMenuName}}</router-link>
                         </li>
                     </ul>
                 </li>
             </ul>
         </header>
         <div class="layout-main">
-            <my-map></my-map>
+            <router-view>
+
+            </router-view>
+            <!-- <my-map></my-map> -->
         </div>  
     </div>
 </template>
 <script>
 import {MyMap} from '@/components/index.js'
+import {User} from '@/request/api.js'
 export default {
     data(){
         return{
             menus:[],
-            canvas:null
+            canvas:null,
+            index:0
         }
     },
     components:{
@@ -37,12 +41,16 @@ export default {
     },
     created(){
         this.menus = this.$t('layout.menus')
+        console.log(this.$route.path)
+        let path = this.$route.path
+        let index = this.menus.findIndex(item => {
+            let reg = new RegExp(item.path)
+            return reg.test(path)
+        })
+        this.index = index>=0?index:0
     },
     mounted(){
-        this.$nextTick(() => {
-            this.canvas = this.drawMenubg()
-            console.log(this.canvas)
-        })
+        this.getMenus()
     },
     methods:{
         /**
@@ -51,7 +59,7 @@ export default {
         drawMenubg(){
             var c = Math.min, h = Math.sign, m = Math.max, n = Math.abs, j = .85, k = 10, l = 4;
             var opt = {};
-            opt.currentIndex = 1;
+            opt.currentIndex = this.index;
             opt.canvas = document.getElementById('canvas');
 
 
@@ -87,13 +95,13 @@ export default {
                 var a = document.querySelectorAll(".menu .menu-item"), b = [], c = 0;
                 Array.prototype.forEach.call(a, function (a) {
                     b.push(c), c += a.offsetWidth
-                }), b[0] = -20, b.push(c), opt.tabWidthList = b, opt.tabHeight = a[0].offsetHeight + 0, opt.height = opt.tabHeight + 20, opt.width = window.innerWidth
+                }), b[0] = -20, b.push(c), opt.tabWidthList = b, opt.tabHeight = a[0].offsetHeight, opt.height = opt.tabHeight + 20, opt.width = window.innerWidth
             }
 
 
             var _toggle = function (navindex) {
-
                 "undefined" !== typeof navindex && navindex !== opt.currentIndex && opt.tabWidthList && opt.tabWidthList.length && (!opt.animating || navindex !== opt.nextIndex) && (opt.animating = true, opt.distance = opt.tabWidthList[navindex] - opt.tabWidthList[opt.currentIndex], opt.avgSpeed = calcAVGSpeed(opt.distance), opt.curDisX = 0, opt.nextIndex = navindex)
+                this.index = navindex
                 return false;
 
             }
@@ -130,10 +138,10 @@ export default {
                 var b = opt.canvas.getContext("2d"), d = .3;
                 //clearRect 在给定的矩形内清除指定的像素,这里清完了
                 b.clearRect(0, 0, 2 * opt.width, 2 * opt.height);
-                b.shadowColor = "rgba(0, 193, 220, 1)";
+                b.shadowColor = "#048C92";
                 b.shadowBlur = 5;
-                b.strokeStyle = "#004CB3";
-                b.lineWidth = .8;
+                b.strokeStyle = "#048C92";
+                b.lineWidth = 2.8;
                 b.fillStyle = "none";
                 _draw(b, false);
                 //这里绘制了外围边框线条
@@ -166,7 +174,7 @@ export default {
             }
 
             var _draw = function (canvasObj, trueorfalse) {
-                var navindex = opt.currentIndex, tableHeight = opt.tabHeight, f = 0, g = 40, i = 20, j = .5, k = 2.5, l = 0;
+                var navindex = opt.currentIndex, tableHeight = opt.tabHeight, f = 470, g = 40, i = 20, j = .5, k = 2.5, l = 0;
                 if (canvasObj.beginPath(), canvasObj.moveTo(-50, opt.height + 10), canvasObj.lineTo(-50, tableHeight + j), opt.animating) {
                     var m = getCurSpeed(opt.curDisX, opt.distance);
                     l = c(n(opt.distance), n(opt.curDisX + m)) * h(m)
@@ -188,7 +196,7 @@ export default {
                 opt.animating && trueorfalse && (opt.curDisX = l, n(l) >= n(opt.distance) && (opt.animating = false, opt.currentIndex = opt.nextIndex))
             }
 
-            _toggle(1);
+           /*  _toggle(0); */
             _calcTabs();
             _initCanvas(opt.canvas, opt.width, opt.height);
             _createPattern(opt.canvas);
@@ -200,28 +208,107 @@ export default {
             return {
                 "_toggle": _toggle
             }
+        },
+        changeRoute(i){
+            this.canvas._toggle(i)
+        },
+        formatterMenu(arr,guid,result =[]){
+            arr.forEach(item => {
+                if(item.FParentGUID == guid){
+                    result.push(item)
+                    item.children = this.formatterMenu(arr,item.FGUID)
+                }
+            })
+            return result
+        },
+        getMenus(){
+            User({
+                FAction:'QueryAdminMenuListByUserGUID'
+            })
+            .then(result => {
+                let menus = result.FObject
+               /*  this.menus = this.formatterMenu(menus,null,[]) */
+                this.$nextTick(() => {
+                    this.canvas = this.drawMenubg()
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
     }
 }
 </script>
 <style lang="scss">
 .layout{
+    height: 100%;
     &-header{
         width:100%;
-        height:58px;
-        background:linear-gradient(0deg,rgba(42,79,145,1) 0%,rgba(9,29,63,1) 100%);
+        height:100px;
+        padding-top: 60px;
+        box-sizing: border-box;
+        background:#000B21;
         position: relative;
-        ul{
-            display: flex;
-            li.menu-item{
-                width: 120px;
-                height: 30px;
-                line-height: 30px;
+        z-index: 10;
+        .logo{
+            position: absolute;
+            align-items: center;
+            top: 39px;
+            left: 90px;
+            img{
+                    width: 52px;
+                    height: 39px;
+            }
+            .system-name{
+                font-size:32px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                color:rgba(255,255,255,1);
             }
         }
+        #canvas{
+            top: 57px;
+        }
+        >ul{
+            margin-left: 470px;
+            display: flex;
+            >li.menu-item{
+                width: 120px;
+                height: 40px;
+                line-height: 40px;
+                cursor: pointer;
+                font-size:20px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                color:rgba(255,255,255,1);
+                .menu-children{
+                    display: none;
+                }
+                &:hover{
+                    .menu-children{
+                        width: 100%;
+                        margin-top: 0px;
+                        display: block;
+                        box-sizing: border-box;
+                        background: #002032;
+                        li{
+                            height: 40px;
+                            line-height: 40px;
+                            font-size: 16px;
+                            a{
+                                display: block
+                            }
+                            &:hover{
+                                background: #15868c;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
     }
     &-main{
-        height: 710px;
+        height: calc(100% - 100px);
     }
 }
 </style>

@@ -1,13 +1,10 @@
 //配置axios
 import axios from 'axios';
-import {messageErr} from '@/plugins/statusCode.js'
+/* import {messageErr} from '@/plugins/statusCode.js' */
 import router from '../router'
 import { Loading } from 'element-ui';
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {    
-    /* axios.defaults.baseURL = 'http://www.caszyj.com/DigitalAPI/'; */
-    /* axios.defaults.baseURL = 'http://172.172.172.80:8088/' */
-    axios.defaults.baseURL = 'http://47.107.224.8:8080/'
+if (process.env.NODE_ENV == 'development') {
     
 } 
 else if (process.env.NODE_ENV == 'debug') {    
@@ -69,16 +66,17 @@ export function post(url, params,load = false) {
             })
         }
         let obj = {
-            FTokenID:sessionStorage.getItem('FToken')||'1C49B3DE-C244-4D91-B1E3-10ABFE56EA56',
+            FTokenID:localStorage.getItem('FToken')||'46fb96df-b6be-4f5e-b509-e1fb64bf8ab1',
             /* ProjectID:sessionStorage.getItem('projectID')||1, */
             /* FVersion:"1.0.0", */		
         }
-        axios.post(url,Object.assign(obj,params))
+        axios.post('/Web'+url,Object.assign(obj,params))
         .then(res => {
            if(res.data.Result===200||res.data.Result===201){
             resolve(res.data);
            }else{
-            messageErr(res.data?res.data.Result:100,res.data?res.data.Message:res,router)
+            reject(res.data)
+            /* messageErr(res.data?res.data.Result:100,res.data?res.data.Message:res,router) */
            }
         })
         .catch(err =>{
@@ -86,7 +84,7 @@ export function post(url, params,load = false) {
             if(err.message&&err.message.includes('timeout')){
                 /* messageErr(105,'连接超时，请勿频繁操作',router) */
             }else{
-                messageErr(err.data?err.data.Result:100,err.data?err.data.Message:err,router)
+               /*  messageErr(err.data?err.data.Result:100,err.data?err.data.Message:err,router) */
             }
             reject(err.data?err.data:err)
         })
