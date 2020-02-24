@@ -8,7 +8,7 @@
                 <li class="user-name-dropdown">
                     <el-dropdown>
                       <span class="el-dropdown-link">
-                        张大大<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{userName||'--'}}<i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>修改密码</el-dropdown-item>
@@ -61,7 +61,8 @@ export default {
         return{
             menus:[],
             canvas:null,
-            index:0
+            index:0,
+            userName:localStorage.getItem('userName')
         }
     },
     components:{
@@ -69,7 +70,6 @@ export default {
     },
     created(){
         this.menus = this.$t('layout.menus')
-        console.log(this.$route.path)
         let path = this.$route.path
         let index = this.menus.findIndex(item => {
             let reg = new RegExp(item.path)

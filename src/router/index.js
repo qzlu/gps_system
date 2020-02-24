@@ -1,14 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '@/views/Login/index.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path:'/login',
-    component:Login
-  },
   {
     path: '/',
     name: 'home',
@@ -95,5 +89,18 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  let {token, userName,userId}= to.query
+  if(token){
+    localStorage.setItem('FToken',token)
+    localStorage.setItem('userName',userName)
+    localStorage.setItem('userId',userId)
+  }
+  token = token || sessionStorage.getItem('FToken')
+  if(!token){
+    window.location.href = 'http://39.108.194.238:56081'
+  }else{
+    next()
+  }
+})
 export default router
