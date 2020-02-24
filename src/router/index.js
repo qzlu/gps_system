@@ -1,55 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '@/views/Login/index.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path:'/login',
-    component:Login
-  },
-  {
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/Layout/Layout.vue'),
-    children: [
-      {
-        path: '/monitor',
-        component: () => import( '@/views/Layout/common.vue'),
-      },
-      {
-        path: '/manage',
-        name: 'manage',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import( /* webpackChunkName: "about" */ '@/views/Layout/common.vue'),
-        children: [
-          {
-            path: '/manage/company', //公司管理
-            component:() => import('@/views/Manage/company.vue')
-          },
-          {
-            path: '/manage/car', //车辆管理
-            component: () => import('@/views/Manage/car.vue')
-          },
-          {
-            path: '/manage/driver', //司机管理
-            component: () => import('@/views/Manage/driver.vue')
-          },
-          {
-            path: '/manage/device', //设备管理
-            component: () => import('@/views/Manage/device.vue')
-          },
-          {
-            path: '/manage/user', //用户管理
-            component: () => import('@/views/Manage/user.vue')
-          }
-        ]
-      }
-    ]
-  },
 ]
 
 const router = new VueRouter({

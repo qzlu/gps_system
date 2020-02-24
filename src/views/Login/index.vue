@@ -7,7 +7,7 @@
       <li>{{$t('appointmentExperience')}}</li>
     </ul>
     <div class="login-main">
-      <h2>车联网平台</h2>
+      <h2>{{$t('formName')}}</h2>
       <div class="login-form">
         <svg class="login-form-bg" id="组_11" data-name="组 11" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="658" height="489.5" viewBox="0 0 658 489.5">
           <defs>
@@ -44,7 +44,7 @@
           <path id="圆角矩形_1_拷贝_4-2" data-name="圆角矩形 1 拷贝 4" class="cls-2" d="M16.5,6.5h628a6,6,0,0,1,6,6v462a6,6,0,0,1-6,6H16.5a10,10,0,0,1-10-10V16.5A10,10,0,0,1,16.5,6.5Z"/>
           <path id="矩形_2_副本_2_拷贝" data-name="矩形 2 副本 2 拷贝" class="cls-3" d="M2677.64,2808.85h-32.33v36.27l-7.31,8.21V2801h46.63Zm-0.26,468.31h-32.12v-36.27l-7.26-8.2v52.32h46.33Zm567.24-467h32.12v36.27l7.27,8.2v-52.32h-46.33Zm0.26,467h31.91v-36.27l7.22-8.2v52.32h-46.03Z" transform="translate(-2632.5 -2795.5)"/>
         </svg>
-        <h3>用户登录</h3>
+        <h3>{{$t('userLogin')}}</h3>
         <el-input v-model="userName" @focus="errText = null">
           <i slot="prefix" class=" iconfont icon-Itsmine"></i>
         </el-input>
@@ -56,7 +56,7 @@
           <span>{{$t('rememberPassword')}}</span>
           <span class="err-text" v-if="errText">{{errText}}</span> 
         </p>
-        <el-button @click="login()">登　录</el-button>
+        <el-button @click="login()">{{$t('login')}}</el-button>
       </div>
     </div>
   </div>
@@ -117,13 +117,14 @@ export default {
             }
             Login({
                 FUserName:this.userName,
-                FPassword:Md5(this.password)
+                FPassword:this.password
             })
             .then((result) => {
                 this.saveUserInfo()
                 let data = result.FObject[0]
-                localStorage.setItem('FToken',data.FTokenID)
-                this.$router.push('/')
+                let {FBSAddress,FTokenID,FUserGUID,FUserName} = data
+                localStorage.setItem('FToken',FTokenID)
+                window.location.href = `${FBSAddress}?token=${FTokenID}&userName=${FUserName}&userId=${FUserGUID}`
             }).catch((err) => {
                 if(err.Result == 103){
                     this.errText = '用户名或密码错误'

@@ -9,7 +9,7 @@ Vue.use(Element)
 import '@/assets/theme/index.css'
 import '@/assets/css-font/iconfont.css'
 import '@/assets/css/reset.css'
-import '@/assets/css/common.scss'
+/* import '@/assets/css/common.scss' */
 /* import '@/assets/css/reset-el-table.scss' */
 Vue.config.productionTip = false
 
