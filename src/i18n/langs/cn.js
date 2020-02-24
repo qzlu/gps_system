@@ -86,6 +86,7 @@ const cn = {
     oldPassword: '旧密码',
     repeatPassword:'重复密码',
     repeatPasswordErr: '重复密码不一致',
+    setMenuErr:'请设置菜单!',
     fuelTypeList: [{
         value: 1,
         label: '汽油'

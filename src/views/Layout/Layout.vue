@@ -265,7 +265,7 @@ export default {
             })
         },
         logOut(){
-            this.$router.push('/login')
+            window.location.href = 'http://39.108.194.238:56081'
         }
     }
 }

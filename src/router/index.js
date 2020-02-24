@@ -91,12 +91,13 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   let {token, userName,userId}= to.query
-  if(token){
+  if (token) {
+    console.log('测试',token)
     localStorage.setItem('FToken',token)
     localStorage.setItem('userName',userName)
     localStorage.setItem('userId',userId)
   }
-  token = token || sessionStorage.getItem('FToken')
+  token = token || localStorage.getItem('FToken')
   if(!token){
     window.location.href = 'http://39.108.194.238:56081'
   }else{

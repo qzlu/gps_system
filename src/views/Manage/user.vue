@@ -9,19 +9,20 @@
             <div class="add-user" @click="addUser">
                 <i class="el-icon-plus"></i>
             </div>  
-            <div class="tree">
+            <div class="tree" style="height:816px">
                 <el-scrollbar>
                     <el-tree
+                     ref="tree"
                      :data="userData"
+                     node-key="FGUID"
                      default-expand-all
                      highlight-current
                      :expand-on-click-node="false"
                      :props="defaultProps"
-                     @node-click="nodeClick"
                     >
                         <template slot-scope="{ node, data }">
                             <div class="node-item">
-                                <div class="node-item-label">
+                                <div class="node-item-label" @click="nodeClick(data)">
                                     <span>{{data.FUserName}}</span>
                                 </div>
                                 <div class="r">
@@ -271,8 +272,7 @@ export default {
             queryType:1,
             searchKey:"",
             companyList:[],
-            currentNode:{ //当前选中的节点
-            },
+            currentNode:null ,//当前选中的节点
             FTelephoneRule:[], //联系方式规则
             webMenuData:[],
             appMenu:[],
@@ -339,8 +339,12 @@ export default {
             })
             .then((result) => {
                 this.userData = [result.FObject]
-                if(this.userData&&this.userData[0]){
-                    this.queryUserInfo(this.userData[0])
+                let currentNode = this.currentNode||this.userData[0]
+                if(currentNode){
+                    this.queryUserInfo(currentNode)
+                    this.$nextTick(() => {
+                        this.$refs.tree.setCurrentNode(currentNode)
+                    })
                 }
             }).catch((err) => {
                 console.log(err)
@@ -428,6 +432,9 @@ export default {
             this.addData = {...this.defaultAddData}
             this.checkedMenus = []
             this.appCheckedMenus = []
+            if(this.$refs.menuTree){
+                this.$refs.menuTree.setCheckedKeys([])
+            }
             this.show1 = false
             this.show = true
         },
@@ -435,15 +442,17 @@ export default {
          * 转换功能权限
          * @param {Boolean}  type:true,Number to Boolean ; type:false, Boolean to Number 
          */
-        translatePermission(type = true){   
+        translatePermission(type = true){
+            let result = {}   
             let keys = ['FOpenLock','FDownLoad','FHelp','FSystemUpdate','FUserExpControl']
             keys.forEach(item => {
                 if(type){
-                    this.addData[item] = Boolean(this.addData[item])
+                    result[item] = Boolean(this.addData[item])
                 }else{
-                    this.addData[item] = Number(this.addData[item])
+                    result[item] = Number(this.addData[item])
                 }
             })
+            return result
         },
         /**
          * 获取选中的菜单
@@ -455,15 +464,21 @@ export default {
             let appHalfCheckedMenus = this.$refs.appTree.getHalfCheckedKeys()
             this.addData.FWebMenuGUIDs = [...checkedMenus,...halfCheckedMenus].join(',')
             this.addData.FAppMenuGUIDs = [...appCheckedMenus,...appHalfCheckedMenus].join(',')
-            console.log(this.addData)
         },
         /**
          * 新增或修改用户
          */
         async addOrUpdate(){
             let action
-            this.translatePermission(false)
             this.getCheckedMenus()
+            if(!this.addData.FWebMenuGUIDs){
+                this.$message({
+                    message:this.$t('setMenuErr'),
+                    type:'error',
+                    duration:'500'
+                })
+                return
+            }
             await new Promise(resolve => {
                  this.$refs.form.validate((valid) => {
                   if (valid) {
@@ -476,9 +491,10 @@ export default {
             }else{
                 action = 'AddAdminUser'
             }
+            let permission = this.translatePermission(false)
             User({
                 FAction:action,
-                FT_AdminUser:this.addData
+                FT_AdminUser:{...this.addData,...permission}
             },true)
             .then(result => {
                 this.queryAdminUserTree()
@@ -512,9 +528,11 @@ export default {
             })
             this.addData.FAgentGUIDs = this.userInfo.FAgentGUID
             this.addData.FPassword = '123456'
-            this.translatePermission()
+            this.addData = {...this.addData,...this.translatePermission()}
         },
         nodeClick(data){
+            this.show = false
+            this.show1 = false
             this.queryUserInfo(data)
         },
         /**
@@ -654,6 +672,7 @@ export default {
         width:268px;
         height:48px;
         margin-left: 22px;
+        margin-bottom: 20px;
         display: flex;
         align-items: center;
         justify-content: center;

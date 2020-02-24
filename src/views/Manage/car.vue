@@ -216,7 +216,7 @@
                             <div class="delete">
                                 <i class="el-icon-delete" @click="fileList = [] "></i>
                             </div>
-                            <img :src="'http://39.108.194.238:56081'+file" alt="">
+                            <img :src="baseUrl+file" alt="">
                         </div>
                         <el-upload
                           v-else
@@ -391,7 +391,7 @@
                     </ul>
                     <div class="car-image-box">
                         <div class="car-iamge-content">
-                            <img v-if="carDetail.FImage" :src="carDetail.FImage" alt="">
+                            <img v-if="carDetail.FImage" :src="baseUrl+carDetail.FImage" alt="">
                             <img v-else src="@/assets/images/no-image.jpg" alt="">
                         </div>
                         <ul class="car-params">
@@ -530,6 +530,7 @@ export default {
             deviceList:[],//设备列表
             carTeamList:[], //车队列表
             driverList:[],//司机列表
+            baseUrl:process.env.NODE_ENV == 'development'?'http://39.108.194.238:56081':''
         }
     },
     created(){
@@ -784,9 +785,9 @@ export default {
         },
         uploadSuccess (res, file, fileList) {
           let data = res.data
-          console.log('upload result:', res, file)
-         /*  file.key = data.key
-          this.fileList.push(data.key) */
+          if(data.Result == 200){
+              this.file = '/'+data.Message
+          }
         },
         handleSelectionChange(rows){
             this.checkRows = rows
